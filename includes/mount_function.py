@@ -23,3 +23,7 @@ def mount_adls(storage_account_name, container_name):
       extra_configs = configs)
     
     
+
+# COMMAND ----------
+
+mount_adls("vasanthblob", "final")
