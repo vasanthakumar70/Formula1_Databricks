@@ -1,10 +1,12 @@
 # Databricks notebook source
-dbutils.fs.ls('/mnt/vasanthblob/processed/')
+dbutils.fs.ls('/mnt/vasanthblob/')
 
 # COMMAND ----------
 
 dbutils.widgets.text("process_path", "")
+dbutils.widgets.text("presentation_path", "")
 processed_path=dbutils.widgets.get("process_path")
+presentation_path=dbutils.widgets.get("presentation_path")
 
 # COMMAND ----------
 
@@ -17,7 +19,7 @@ circuit=spark.read.format("parquet").load(f"{processed_path}/circuits")
 
 # COMMAND ----------
 
-from pyspark.sql.functions import col
+from pyspark.sql.functions import col,current_timestamp
 
 # COMMAND ----------
 
@@ -26,12 +28,12 @@ race_joined=race_filtered\
         circuit, 
         race["circuit_id"]==circuit["circuit_id"], 
         how="inner")\
-    .select("race_Id",race["circuit_id"], race["name"], "race_timestamp", "race_year",col("location").alias("circuit_location"))\
-    .filter("location=='Abu Dhabi'")
+    .select("race_Id",race["circuit_id"], race["name"].alias("Race_Name"), "race_timestamp", "race_year",col("location").alias("circuit_location"))\
+   ## .filter("location=='Abu Dhabi'")
 
 # COMMAND ----------
 
-
+race_joined.show()
 
 # COMMAND ----------
 
@@ -45,7 +47,7 @@ driver=spark.read.format("parquet").load(f"{processed_path}/driver")
 
 # COMMAND ----------
 
-driver_renamed=driver.select("driver_id", "name", "nationality","number")
+driver_renamed=driver.select("driver_id", col("name").alias("Driver"), "nationality","number")
 
 # COMMAND ----------
 
@@ -53,7 +55,7 @@ constructor=spark.read.format("parquet").load(f"{processed_path}/constructor")
 
 # COMMAND ----------
 
-constructor_renamed=constructor.select("constructor_id", "name")
+constructor_renamed=constructor.select("constructor_id", col("name").alias("Team"))
 
 # COMMAND ----------
 
@@ -69,8 +71,18 @@ result_joined.show()
 
 # COMMAND ----------
 
-race_joined.join(
+race_result=race_joined.join(
     result_joined,
     result_joined["race_id"]==race_joined["race_Id"]
-)/
-    .orderBy(col("points").desc()).show()
+)\
+    .select("race_year","Race_name","race_timestamp","circuit_location",col("driver").alias("driver_name"),col("number").alias("driver_number"),col("nationality").alias("driver_nationality"),"team","grid","fastest_lap_time","points","position")\
+    .withColumn("created_date",current_timestamp())
+
+
+# COMMAND ----------
+
+race_result.write.format("parquet").mode("overwrite").save(f"{presentation_path}/race_result")
+
+# COMMAND ----------
+
+race_result.display()
