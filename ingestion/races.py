@@ -3,6 +3,15 @@
 
 # COMMAND ----------
 
+# MAGIC %run ../includes/configuration
+
+# COMMAND ----------
+
+dbutils.wigets.text("source_point","")
+source_point=dbutils.widgets.get("source_point")
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC races
 
@@ -24,7 +33,7 @@ races_schema = StructType([StructField("raceId", IntegerType(), False),
 
 # COMMAND ----------
 
-races=spark.read.format("csv").option("header","True").schema(races_schema).load("/mnt/vasanthblob/raw/races.csv")
+races=spark.read.format("csv").option("header","True").schema(races_schema).load(f"{raw_path}/races.csv")
 
 # COMMAND ----------
 
@@ -46,4 +55,4 @@ race_with_date.show(truncate=False)
 
 # COMMAND ----------
 
-race_with_date.write.format("parquet").partitionBy("race_year").mode("overwrite").save("/mnt/vasanthblob/processed/race")
+race_with_date.write.format("parquet").partitionBy("race_year").mode("overwrite").save(f"{process_path}/race")

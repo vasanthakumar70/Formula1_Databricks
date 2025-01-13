@@ -1,8 +1,10 @@
 # Databricks notebook source
-dbutils.widgets.text("processed_path", "")
-dbutils.widgets.text("source_path", "")
-processed=dbutils.widgets.get("processed_path")
-source=dbutils.widgets.get("source_path")
+# MAGIC %run ../includes/configuration
+
+# COMMAND ----------
+
+processed=process_path
+source=raw_path
 
 # COMMAND ----------
 

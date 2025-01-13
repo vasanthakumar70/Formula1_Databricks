@@ -3,12 +3,17 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../includes/mount_function
+# MAGIC %run ../includes/configuration
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC circuits
+
+# COMMAND ----------
+
+dbutils.wigets.text("source_point","")
+source_point=dbutils.widgets.get("source_point")
 
 # COMMAND ----------
 
@@ -29,7 +34,7 @@ circuits_schema = StructType([StructField("circuitId", IntegerType(), False),
 
 # COMMAND ----------
 
-circuit=spark.read.format("csv").option("header","True").schema(circuits_schema).load("/mnt/vasanthblob/raw/circuits.csv")
+circuit=spark.read.format("csv").option("header","True").schema(circuits_schema).load(f"{raw_path}/circuits.csv")
 
 # COMMAND ----------
 
@@ -51,4 +56,4 @@ circuit_with_date.show(truncate=False)
 
 # COMMAND ----------
 
-circuit_with_date.write.format("parquet").mode("overwrite").save("/mnt/vasanthblob/processed/circuits")
+circuit_with_date.write.format("parquet").mode("overwrite").save(f"{process_path}/circuits")

@@ -3,12 +3,17 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../includes/mount_function
+# MAGIC %run ../includes/configuration
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC result
+# MAGIC laptimes
+
+# COMMAND ----------
+
+dbutils.wigets.text("source_point","")
+source_point=dbutils.widgets.get("source_point")
 
 # COMMAND ----------
 
@@ -27,7 +32,7 @@ lap_times_schema = StructType([StructField("raceId", IntegerType(), False),
 
 # COMMAND ----------
 
-lap_times=spark.read.format("csv").schema(lap_times_schema).load("/mnt/vasanthblob/raw/lap_times")
+lap_times=spark.read.format("csv").schema(lap_times_schema).load(f"{raw_path}/lap_times")
 
 # COMMAND ----------
 
@@ -45,4 +50,4 @@ lap_times_with_date.show(truncate=False)
 
 # COMMAND ----------
 
-lap_times_with_date.write.format("parquet").mode("overwrite").save("/mnt/vasanthblob/processed/lap_times")
+lap_times_with_date.write.format("parquet").mode("overwrite").save(f"{process_path}/lap_times")

@@ -3,19 +3,17 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../includes/mount_function
-
-# COMMAND ----------
-
-dbutils.widgets.text("source_path","")
-dbutils.widgets.text("processed_path","")
-source_path=dbutils.widgets.get("source_path")
-processed_path=dbutils.widgets.get("processed_path")
+# MAGIC %run ../includes/configuration
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC races
+# MAGIC driver
+
+# COMMAND ----------
+
+dbutils.wigets.text("source_point","")
+source_point=dbutils.widgets.get("source_point")
 
 # COMMAND ----------
 
@@ -40,7 +38,7 @@ drivers_schema = StructType([
 
 # COMMAND ----------
 
-drivers=spark.read.format("json").schema(drivers_schema).load(f"{source_path}/drivers.json")
+drivers=spark.read.format("json").schema(drivers_schema).load(f"{raw_path}/drivers.json")
 
 # COMMAND ----------
 
@@ -59,7 +57,7 @@ driver_with_date.show(truncate=False)
 
 # COMMAND ----------
 
-driver_with_date.write.format("parquet").mode("overwrite").save(f"{processed_path}/driver")
+driver_with_date.write.format("parquet").mode("overwrite").save(f"{process_path}/driver")
 
 # COMMAND ----------
 

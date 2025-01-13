@@ -3,12 +3,17 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../includes/mount_function
+# MAGIC %run ../includes/configuration
+
+# COMMAND ----------
+
+dbutils.wigets.text("source_point","")
+source_point=dbutils.widgets.get("source_point")
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC result
+# MAGIC qualifying
 
 # COMMAND ----------
 
@@ -30,7 +35,7 @@ qualifying_schema = StructType(fields=[StructField("qualifyId", IntegerType(), F
 
 # COMMAND ----------
 
-qualifying=spark.read.format("json").option("multiLine","True").schema(qualifying_schema).load("/mnt/vasanthblob/raw/qualifying")
+qualifying=spark.read.format("json").option("multiLine","True").schema(qualifying_schema).load(f"{raw_path}/qualifying")
 
 # COMMAND ----------
 
@@ -50,4 +55,4 @@ qualifying_with_date.show()
 
 # COMMAND ----------
 
-qualifying_with_date.write.format("parquet").mode("overwrite").save("/mnt/vasanthblob/processed/qualifying")
+qualifying_with_date.write.format("parquet").mode("overwrite").save(f"{process_path}/qualifying")

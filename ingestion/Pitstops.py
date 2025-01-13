@@ -3,12 +3,17 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../includes/mount_function
+# MAGIC %run ../includes/configuration
+
+# COMMAND ----------
+
+dbutils.wigets.text("source_point","")
+source_point=dbutils.widgets.get("source_point")
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC result
+# MAGIC pitstops
 
 # COMMAND ----------
 
@@ -32,7 +37,7 @@ dbutils.fs.ls("/mnt/vasanthblob/raw/")
 
 # COMMAND ----------
 
-pitshops=spark.read.format("json").schema(pit_stops_schema).option("multiline", "true").load("/mnt/vasanthblob/raw/pit_stops.json")
+pitshops=spark.read.format("json").schema(pit_stops_schema).option("multiline", "true").load(f"{raw_path}/pit_stops.json")
 
 # COMMAND ----------
 
@@ -49,4 +54,4 @@ pitshops_with_date.show(truncate=False)
 
 # COMMAND ----------
 
-pitshops_with_date.write.format("parquet").mode("overwrite").save("/mnt/vasanthblob/processed/pitshops")
+pitshops_with_date.write.format("parquet").mode("overwrite").save(f"{process_path}/pitshops")

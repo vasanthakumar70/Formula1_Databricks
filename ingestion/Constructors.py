@@ -3,12 +3,17 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../includes/mount_function
+# MAGIC %run ../includes/configuration
+
+# COMMAND ----------
+
+dbutils.wigets.text("source_point","")
+source_point=dbutils.widgets.get("source_point")
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC races
+# MAGIC constructor
 
 # COMMAND ----------
 
@@ -27,7 +32,7 @@ constructor_schema = StructType([
 
 # COMMAND ----------
 
-constructor=spark.read.format("json").schema(constructor_schema).load("/mnt/vasanthblob/raw/constructors.json")
+constructor=spark.read.format("json").schema(constructor_schema).load(f"{raw_path}/constructors.json")
 
 # COMMAND ----------
 
@@ -48,4 +53,8 @@ constructor_with_date.show(truncate=False)
 
 # COMMAND ----------
 
-constructor_with_date.write.format("parquet").mode("overwrite").save("/mnt/vasanthblob/processed/constructor")
+if source_point="adls":
+    constructor_with_date.write.format("parquet").mode("overwrite").save(f"{process_path}/constructor")
+elif source_point="table":
+    constructor_with_date.write.mode("overwrite").saveAsTable("constructor")
+    

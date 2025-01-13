@@ -3,7 +3,12 @@
 
 # COMMAND ----------
 
-# MAGIC %run ../includes/mount_function
+# MAGIC %run ../includes/configuration
+
+# COMMAND ----------
+
+dbutils.wigets.text("source_point","")
+source_point=dbutils.widgets.get("source_point")
 
 # COMMAND ----------
 
@@ -38,7 +43,7 @@ results_schema = StructType(fields=[StructField("resultId", IntegerType(), False
 
 # COMMAND ----------
 
-results=spark.read.format("json").schema(results_schema).load("/mnt/vasanthblob/raw/results.json")
+results=spark.read.format("json").schema(results_schema).load(f"{raw_path}/results.json")
 
 # COMMAND ----------
 
@@ -62,4 +67,4 @@ results_with_date.show(truncate=False)
 
 # COMMAND ----------
 
-results_with_date.write.format("parquet").partitionBy("race_id").mode("overwrite").save("/mnt/vasanthblob/processed/results")
+results_with_date.write.format("parquet").partitionBy("race_id").mode("overwrite").save(f"{process_path}/results")
