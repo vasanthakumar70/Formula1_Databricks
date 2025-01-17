@@ -7,11 +7,6 @@
 
 # COMMAND ----------
 
-dbutils.wigets.text("source_point","")
-source_point=dbutils.widgets.get("source_point")
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC pitstops
 

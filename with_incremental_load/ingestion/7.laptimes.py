@@ -9,6 +9,8 @@
 
 dbutils.widgets.text("source_point","table")
 source_point=dbutils.widgets.get("source_point")
+dbutils.widgets.text("filename","")
+filename=dbutils.widgets.get("filename")
 
 # COMMAND ----------
 
@@ -32,7 +34,7 @@ lap_times_schema = StructType([StructField("raceId", IntegerType(), False),
 
 # COMMAND ----------
 
-lap_times=spark.read.format("csv").schema(lap_times_schema).load(f"{raw_path}/lap_times")
+lap_times=spark.read.format("csv").schema(lap_times_schema).load(f"{raw_path}/{filename}/lap_times")
 
 # COMMAND ----------
 

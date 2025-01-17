@@ -9,6 +9,8 @@
 
 dbutils.widgets.text("source_point","table")
 source_point=dbutils.widgets.get("source_point")
+dbutils.widgets.text("filename","")
+filename=dbutils.widgets.get("filename")
 
 # COMMAND ----------
 
@@ -37,7 +39,7 @@ dbutils.fs.ls("/mnt/vasanthblob/raw/")
 
 # COMMAND ----------
 
-pitshops=spark.read.format("json").schema(pit_stops_schema).option("multiline", "true").load(f"{raw_path}/pit_stops.json")
+pitshops=spark.read.format("json").schema(pit_stops_schema).option("multiline", "true").load(f"{raw_path}/{filename}/pit_stops.json")
 
 # COMMAND ----------
 

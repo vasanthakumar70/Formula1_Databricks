@@ -1,12 +1,10 @@
 # Databricks notebook source
-dbutils.fs.ls('/mnt/vasanthblob/')
+# MAGIC %run ../includes/configuration
 
 # COMMAND ----------
 
-dbutils.widgets.text("process_path", "")
-dbutils.widgets.text("presentation_path", "")
-processed_path=dbutils.widgets.get("process_path")
-presentation_path=dbutils.widgets.get("presentation_path")
+processed_path=process_path
+presentation_path=presentation_path
 
 # COMMAND ----------
 

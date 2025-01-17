@@ -12,11 +12,6 @@
 
 # COMMAND ----------
 
-dbutils.wigets.text("source_point","")
-source_point=dbutils.widgets.get("source_point")
-
-# COMMAND ----------
-
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType,DoubleType,DateType
 from pyspark.sql.functions import to_timestamp,concat,col,lit
 

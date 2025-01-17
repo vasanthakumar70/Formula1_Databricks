@@ -9,6 +9,8 @@
 
 dbutils.widgets.text("source_point","table")
 source_point=dbutils.widgets.get("source_point")
+dbutils.widgets.text("filename","")
+filename=dbutils.widgets.get("filename")
 
 # COMMAND ----------
 
@@ -43,7 +45,7 @@ results_schema = StructType(fields=[StructField("resultId", IntegerType(), False
 
 # COMMAND ----------
 
-results=spark.read.format("json").schema(results_schema).load(f"{raw_path}/results.json")
+results=spark.read.format("json").schema(results_schema).load(f"{raw_path}/{filename}/results.json")
 
 # COMMAND ----------
 
@@ -67,7 +69,14 @@ results_with_date.show(truncate=False)
 
 # COMMAND ----------
 
+from delta.tables import DeltaTable
+
+# COMMAND ----------
+
 if source_point=="adls":
     results_with_date.write.format("parquet").partitionBy("race_id").mode("overwrite").save(f"{process_path}/results")
 elif source_point=="table":
-    results_with_date.write.format("delta").mode("overwrite").saveAsTable("f1_processed.results")
+    if spark.catalog.tableExists("f1_processed.result"):
+        DeltaTable.forPath(spark,f"{process_path}/results")
+    else:
+        results_with_date.write.patitionBy("race_id").format("delta").mode("overwrite").saveAsTable("f1_processed.results")

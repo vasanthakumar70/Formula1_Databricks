@@ -9,6 +9,8 @@
 
 dbutils.widgets.text("source_point","table")
 source_point=dbutils.widgets.get("source_point")
+dbutils.widgets.text("filename","")
+filename=dbutils.widgets.get("filename")
 
 # COMMAND ----------
 
@@ -32,7 +34,7 @@ constructor_schema = StructType([
 
 # COMMAND ----------
 
-constructor=spark.read.format("json").schema(constructor_schema).load(f"{raw_path}/constructors.json")
+constructor=spark.read.format("json").schema(constructor_schema).load(f"{raw_path}/{filename}/constructors.json")
 
 # COMMAND ----------
 

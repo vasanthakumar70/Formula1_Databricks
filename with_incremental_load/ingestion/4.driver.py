@@ -20,6 +20,8 @@ source_point=dbutils.widgets.get("source_point")
 
 dbutils.widgets.text("source_point","table")
 source_point=dbutils.widgets.get("source_point")
+dbutils.widgets.text("filename","")
+filename=dbutils.widgets.get("filename")
 
 # COMMAND ----------
 
@@ -44,7 +46,7 @@ drivers_schema = StructType([
 
 # COMMAND ----------
 
-drivers=spark.read.format("json").schema(drivers_schema).load(f"{raw_path}/drivers.json")
+drivers=spark.read.format("json").schema(drivers_schema).load(f"{raw_path}/{filename}/drivers.json")
 
 # COMMAND ----------
 

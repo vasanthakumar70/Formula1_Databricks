@@ -7,11 +7,6 @@
 
 # COMMAND ----------
 
-dbutils.wigets.text("source_point","")
-source_point=dbutils.widgets.get("source_point")
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC constructor
 
@@ -53,8 +48,7 @@ constructor_with_date.show(truncate=False)
 
 # COMMAND ----------
 
-if source_point="adls":
-    constructor_with_date.write.format("parquet").mode("overwrite").save(f"{process_path}/constructor")
-elif source_point="table":
-    constructor_with_date.write.mode("overwrite").saveAsTable("constructor")
+
+constructor_with_date.write.format("parquet").mode("overwrite").save(f"{process_path}/constructor")
+
     

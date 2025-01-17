@@ -8,7 +8,7 @@ source=raw_path
 
 # COMMAND ----------
 
-driver=dbutils.notebook.run("driver", 0,{"processed_path":processed,"source_path":source})
+driver=dbutils.notebook.run("driver", 0)
 
 # COMMAND ----------
 

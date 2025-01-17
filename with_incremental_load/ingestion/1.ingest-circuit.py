@@ -9,6 +9,8 @@
 
 dbutils.widgets.text("source_point","table")
 source_point=dbutils.widgets.get("source_point")
+dbutils.widgets.text("filename","")
+filename=dbutils.widgets.get("filename")
 
 # COMMAND ----------
 
@@ -34,7 +36,7 @@ circuits_schema = StructType([StructField("circuitId", IntegerType(), False),
 
 # COMMAND ----------
 
-circuit=spark.read.format("csv").option("header","True").schema(circuits_schema).load(f"{raw_path}/circuits.csv")
+circuit=spark.read.format("csv").option("header","True").schema(circuits_schema).load(f"{raw_path}/{filename}/circuits.csv")
 
 # COMMAND ----------
 

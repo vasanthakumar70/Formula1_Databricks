@@ -9,6 +9,8 @@
 
 dbutils.widgets.text("source_point","table")
 source_point=dbutils.widgets.get("source_point")
+dbutils.widgets.text("filename","")
+filename=dbutils.widgets.get("filename")
 
 # COMMAND ----------
 
@@ -33,7 +35,7 @@ races_schema = StructType([StructField("raceId", IntegerType(), False),
 
 # COMMAND ----------
 
-races=spark.read.format("csv").option("header","True").schema(races_schema).load(f"{raw_path}/races.csv")
+races=spark.read.format("csv").option("header","True").schema(races_schema).load(f"{raw_path}/{filename}/races.csv")
 
 # COMMAND ----------
 

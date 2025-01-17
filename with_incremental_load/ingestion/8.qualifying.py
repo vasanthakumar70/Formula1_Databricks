@@ -9,6 +9,8 @@
 
 dbutils.widgets.text("source_point","table")
 source_point=dbutils.widgets.get("source_point")
+dbutils.widgets.text("filename","")
+filename=dbutils.widgets.get("filename")
 
 # COMMAND ----------
 
@@ -35,7 +37,7 @@ qualifying_schema = StructType(fields=[StructField("qualifyId", IntegerType(), F
 
 # COMMAND ----------
 
-qualifying=spark.read.format("json").option("multiLine","True").schema(qualifying_schema).load(f"{raw_path}/qualifying")
+qualifying=spark.read.format("json").option("multiLine","True").schema(qualifying_schema).load(f"{raw_path}/{filename}/qualifying")
 
 # COMMAND ----------
 
