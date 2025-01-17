@@ -7,6 +7,12 @@
 
 # COMMAND ----------
 
+dbutils.widgets.text("source_point","table")
+source_point=dbutils.widgets.get("source_point")
+
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC driver
 
@@ -62,7 +68,7 @@ driver_with_date.show(truncate=False)
 if source_point=="adls":
     driver_with_date.write.format("parquet").mode("overwrite").save(f"{process_path}/driver")
 elif source_point=="table":
-    driver_with_date.write.format("delta").mode("overwrite").saveAsTable(f"{process_database}.driver")
+    driver_with_date.write.format("delta").mode("overwrite").saveAsTable("f1_processed.driver")
 
 # COMMAND ----------
 

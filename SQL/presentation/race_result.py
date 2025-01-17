@@ -1,20 +1,21 @@
 # Databricks notebook source
-# MAGIC %run ../includes/configuration
+dbutils.fs.ls('/mnt/vasanthblob/')
 
 # COMMAND ----------
 
-
-processed_path=process_path
-presentation_path=presentation_path
+dbutils.widgets.text("process_path", "")
+dbutils.widgets.text("presentation_path", "")
+processed_path=dbutils.widgets.get("process_path")
+presentation_path=dbutils.widgets.get("presentation_path")
 
 # COMMAND ----------
 
-race=spark.read.format("delta").table(f"{process_database}.race")
+race=spark.read.format("parquet").load(f"{processed_path}/race")
 race_filtered=race.filter("race_year==2020").select("race_Id","circuit_id", "name", "race_timestamp", "race_year")
 
 # COMMAND ----------
 
-circuit=spark.read.format("delta").table(f"{process_database}.circuits")
+circuit=spark.read.format("parquet").load(f"{processed_path}/circuits")
 
 # COMMAND ----------
 
@@ -36,13 +37,13 @@ race_joined.show()
 
 # COMMAND ----------
 
-result=spark.read.format("delta").table(f"{process_database}.results")
+result=spark.read.format("parquet").load(f"{processed_path}/results")
 result_renamed=result\
     .select("race_id", "driver_id", "constructor_id","grid","position","laps","fastest_lap_time","points")
 
 # COMMAND ----------
 
-driver=spark.read.format("delta").table(f"{process_database}.driver")
+driver=spark.read.format("parquet").load(f"{processed_path}/driver")
 
 # COMMAND ----------
 
@@ -50,7 +51,7 @@ driver_renamed=driver.select("driver_id", col("name").alias("Driver"), "national
 
 # COMMAND ----------
 
-constructor=spark.read.format("delta").table(f"{process_database}.constructor")
+constructor=spark.read.format("parquet").load(f"{processed_path}/constructor")
 
 # COMMAND ----------
 

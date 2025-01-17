@@ -35,10 +35,6 @@ pit_stops_schema = StructType([StructField("raceId", IntegerType(), False),
 
 # COMMAND ----------
 
-dbutils.fs.ls("/mnt/vasanthblob/raw/")
-
-# COMMAND ----------
-
 pitshops=spark.read.format("json").schema(pit_stops_schema).option("multiline", "true").load(f"{raw_path}/{filename}/pit_stops.json")
 
 # COMMAND ----------
@@ -56,7 +52,8 @@ pitshops_with_date.show(truncate=False)
 
 # COMMAND ----------
 
-if source_point=="adls":
-    pitshops_with_date.write.format("parquet").mode("overwrite").save(f"{process_path}/pitshops")
-elif source_point=="table":
-    pitshops_with_date.write.mode("overwrite").saveAsTable("f1_processed.pitshops")
+merge_condition="t.race_id=s.race_id and t.driver_id=s.driver_id and t.stop=s.stop"
+
+# COMMAND ----------
+
+merge_table(pitshops_with_date,process_database,"pitshops",process_path,merge_condition,"race_id")

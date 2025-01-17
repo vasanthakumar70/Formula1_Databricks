@@ -1,5 +1,20 @@
 # Databricks notebook source
 # MAGIC %sql
+# MAGIC drop database if exists f1_raw cascade
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC drop database if exists f1_processed cascade
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC drop database if exists f1_final cascade
+
+# COMMAND ----------
+
+# MAGIC %sql
 # MAGIC create database if not exists f1_raw
 # MAGIC
 
@@ -149,8 +164,3 @@
 # MAGIC %sql
 # MAGIC create database f1_processed
 # MAGIC managed location "abfss://processed@vasanthblob.dfs.core.windows.net"
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC drop database vasanth

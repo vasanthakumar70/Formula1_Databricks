@@ -58,5 +58,5 @@ constructor_with_date.show(truncate=False)
 if source_point=="adls":
     constructor_with_date.write.format("parquet").mode("overwrite").save(f"{process_path}/constructor")
 elif source_point=="table":
-    constructor_with_date.write.mode("overwrite").saveAsTable(f"{process_database}.constructor")
+    constructor_with_date.write.mode("overwrite").saveAsTable("f1_processed.constructor")
     

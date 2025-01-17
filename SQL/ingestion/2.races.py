@@ -60,4 +60,4 @@ race_with_date.show(truncate=False)
 if source_point=="adls":
     race_with_date.write.format("parquet").partitionBy("race_year").mode("overwrite").save(f"{process_path}/race")
 elif source_point=="table":
-    race_with_date.write.mode("overwrite").saveAsTable(f"{process_database}.race")
+    race_with_date.write.mode("overwrite").saveAsTable("f1_processed.race")

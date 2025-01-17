@@ -1,40 +1,57 @@
 # Databricks notebook source
+# MAGIC %sql
+# MAGIC drop database if exists f1_processed_inc cascade
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC create database if not exists f1_processed_inc 
+# MAGIC managed location "/mnt/vasanthblob/incrementalload/processed/"
+
+# COMMAND ----------
+
 # MAGIC %run ../includes/configuration
+
+# COMMAND ----------
+
+dbutils.widgets.text("filename","")
+filename=dbutils.widgets.get("filename")
 
 # COMMAND ----------
 
 processed=process_path
 source=raw_path
-source_path="table"
+source_point="table"
+
 
 # COMMAND ----------
 
-driver=dbutils.notebook.run("4.driver", 0,{"source_path":source_path})
+circuit=dbutils.notebook.run("1.ingest-circuit", 0,{"source_point":source_point,"filename":filename})
 
 # COMMAND ----------
 
-# MAGIC %run "../ingestion/3.Constructors"
+race=dbutils.notebook.run("2.races", 0,{"source_point":source_point,"filename":filename})
 
 # COMMAND ----------
 
-# MAGIC %run "../ingestion/1.ingest-circuit"
+constructor=dbutils.notebook.run("3.Constructors", 0,{"source_point":source_point,"filename":filename})
 
 # COMMAND ----------
 
-# MAGIC %run "../ingestion/7.laptimes"
+driver=dbutils.notebook.run("4.driver", 0,{"source_point":source_point,"filename":filename})
 
 # COMMAND ----------
 
-# MAGIC %run "../ingestion/6.Pitstops"
+result=dbutils.notebook.run("5.result", 0,{"source_point":source_point,"filename":filename})
 
 # COMMAND ----------
 
-# MAGIC %run "../ingestion/8.qualifying"
+pitstops=dbutils.notebook.run("6.Pitstops", 0,{"source_point":source_point,"filename":filename})
 
 # COMMAND ----------
 
-# MAGIC %run "../ingestion/2.races"
+qualifying=dbutils.notebook.run("7.laptimes", 0,{"source_point":source_point,"filename":filename})
 
 # COMMAND ----------
 
-# MAGIC %run "../ingestion/5.result"
+driver=dbutils.notebook.run("8.qualifying", 0,{"source_point":source_point,"filename":filename})

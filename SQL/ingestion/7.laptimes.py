@@ -52,8 +52,7 @@ lap_times_with_date.show(truncate=False)
 
 # COMMAND ----------
 
-merge_condition="t.race_id=s.race_id and t.driver_id=s.driver_id and t.lap=s.lap "
-
-# COMMAND ----------
-
-merge_table(lap_times_with_date,process_database,"lap_times",process_path,merge_condition,"race_id")
+if source_point=="adls":
+    lap_times_with_date.write.format("parquet").mode("overwrite").save(f"{process_path}/lap_times")
+elif source_point=="table":
+    lap_times_with_date.write.mode("overwrite").saveAsTable("f1_processed.lap_times")

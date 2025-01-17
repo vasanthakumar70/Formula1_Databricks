@@ -57,8 +57,7 @@ qualifying_with_date.show()
 
 # COMMAND ----------
 
-merge_condition ="t.qualify_id = s.qualify_id"
-
-# COMMAND ----------
-
-merge_table(qualifying_with_date,process_database,"qualifying",process_path,merge_condition,"race_id")
+if source_point=='adls':
+    qualifying_with_date.write.format("parquet").mode("overwrite").save(f"{process_path}/qualifying")
+elif source_point=='table':
+    qualifying_with_date.write.mode("overwrite").saveAsTable("f1_processed.qualifying")

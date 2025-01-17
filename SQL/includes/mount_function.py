@@ -26,4 +26,4 @@ def mount_adls(storage_account_name, container_name):
 
 # COMMAND ----------
 
-mount_adls("vasanthblob", "incrementalload")
+mount_adls("vasanthblob", "final")

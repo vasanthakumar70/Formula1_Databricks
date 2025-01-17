@@ -69,16 +69,14 @@ results_with_date.show(truncate=False)
 
 # COMMAND ----------
 
-results_with_date.dropDuplicates(["race_id","driver_id"])
-
-# COMMAND ----------
-
 from delta.tables import DeltaTable
 
 # COMMAND ----------
 
-spark.conf.set("spark.databricks.optimize.dynamicPartitionPruning", "true")
-
-# COMMAND ----------
-
-merge_table(results_with_date,"f1_processed_inc","results",process_path,"t.result_id=s.result_id and t.race_id=s.race_id","race_id")
+if source_point == "adls":
+    results_with_date.write.format("parquet").partitionBy("race_id").mode("overwrite").save(f"{process_path}/results")
+elif source_point == "table":
+    if spark.catalog.tableExists("f1_processed.result"):
+        DeltaTable.forPath(spark, f"{process_path}/results")
+    else:
+        results_with_date.write.partitionBy("race_id").format("delta").mode("overwrite").saveAsTable("f1_processed.results")

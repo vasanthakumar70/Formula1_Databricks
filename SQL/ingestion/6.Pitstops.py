@@ -15,7 +15,7 @@ filename=dbutils.widgets.get("filename")
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC laptimes
+# MAGIC pitstops
 
 # COMMAND ----------
 
@@ -24,36 +24,39 @@ from pyspark.sql.functions import to_timestamp,concat,col,lit
 
 # COMMAND ----------
 
-lap_times_schema = StructType([StructField("raceId", IntegerType(), False),
+pit_stops_schema = StructType([StructField("raceId", IntegerType(), False),
                                       StructField("driverId", IntegerType(), True),
+                                      StructField("stop", StringType(), True),
                                       StructField("lap", IntegerType(), True),
-                                      StructField("position", IntegerType(), True),
                                       StructField("time", StringType(), True),
+                                      StructField("duration", StringType(), True),
                                       StructField("milliseconds", IntegerType(), True)
                                      ])
 
 # COMMAND ----------
 
-lap_times=spark.read.format("csv").schema(lap_times_schema).load(f"{raw_path}/{filename}/lap_times")
+dbutils.fs.ls("/mnt/vasanthblob/raw/")
 
 # COMMAND ----------
 
-lap_times = lap_times.withColumnRenamed("driverId", "driver_id") \
-.withColumnRenamed("raceId", "race_id") \
-.withColumn("ingestion_date", current_timestamp())
+pitshops=spark.read.format("json").schema(pit_stops_schema).option("multiline", "true").load(f"{raw_path}/{filename}/pit_stops.json")
 
 # COMMAND ----------
 
-lap_times_with_date=add_ingestion_date(lap_times)
+pitshops.renamed = pitshops.withColumnRenamed("driverId", "driver_id") \
+.withColumnRenamed("raceId", "race_id")
 
 # COMMAND ----------
 
-lap_times_with_date.show(truncate=False)
+pitshops_with_date=add_ingestion_date(pitshops.renamed)
 
 # COMMAND ----------
 
-merge_condition="t.race_id=s.race_id and t.driver_id=s.driver_id and t.lap=s.lap "
+pitshops_with_date.show(truncate=False)
 
 # COMMAND ----------
 
-merge_table(lap_times_with_date,process_database,"lap_times",process_path,merge_condition,"race_id")
+if source_point=="adls":
+    pitshops_with_date.write.format("parquet").mode("overwrite").save(f"{process_path}/pitshops")
+elif source_point=="table":
+    pitshops_with_date.write.mode("overwrite").saveAsTable("f1_processed.pitshops")
