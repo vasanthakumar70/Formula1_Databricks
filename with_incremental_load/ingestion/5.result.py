@@ -61,7 +61,7 @@ results_renamed = results.withColumnRenamed("resultId", "result_id") \
 
 # COMMAND ----------
 
-results_with_date=add_ingestion_date(results_renamed)
+results_with_date=add_ingestion_date(results_renamed,filename)
 
 # COMMAND ----------
 
@@ -82,3 +82,11 @@ spark.conf.set("spark.databricks.optimize.dynamicPartitionPruning", "true")
 # COMMAND ----------
 
 merge_table(results_with_date,"f1_processed_inc","results",process_path,"t.result_id=s.result_id and t.race_id=s.race_id","race_id")
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC select race_id,count(1) from f1_processed_inc.results
+# MAGIC group by race_id
+# MAGIC order by race_id desc
+# MAGIC

@@ -51,7 +51,7 @@ driver_renamed=drivers.withColumnRenamed("driverId", "driver_id") \
 
 # COMMAND ----------
 
-driver_with_date=add_ingestion_date(driver_renamed)
+driver_with_date=add_ingestion_date(driver_renamed,filename)
 
 # COMMAND ----------
 

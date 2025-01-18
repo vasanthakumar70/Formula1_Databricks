@@ -44,7 +44,7 @@ pitshops.renamed = pitshops.withColumnRenamed("driverId", "driver_id") \
 
 # COMMAND ----------
 
-pitshops_with_date=add_ingestion_date(pitshops.renamed)
+pitshops_with_date=add_ingestion_date(pitshops.renamed,filename)
 
 # COMMAND ----------
 

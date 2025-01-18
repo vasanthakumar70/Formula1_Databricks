@@ -50,7 +50,11 @@ circuit_renamed=circuit\
 
 # COMMAND ----------
 
-circuit_with_date=add_ingestion_date(circuit_renamed)
+circuit_with_date=add_ingestion_date(circuit_renamed,filename)
+
+# COMMAND ----------
+
+
 
 # COMMAND ----------
 

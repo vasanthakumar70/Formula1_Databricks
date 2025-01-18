@@ -49,7 +49,7 @@ races_renamed=races\
 
 # COMMAND ----------
 
-race_with_date=add_ingestion_date(races_renamed)
+race_with_date=add_ingestion_date(races_renamed,filename)
 
 # COMMAND ----------
 

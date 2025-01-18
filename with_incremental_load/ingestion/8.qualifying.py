@@ -49,7 +49,7 @@ qualifying_renamed = qualifying.withColumnRenamed("qualifyId", "qualify_id") \
 
 # COMMAND ----------
 
-qualifying_with_date = add_ingestion_date(qualifying_renamed)
+qualifying_with_date = add_ingestion_date(qualifying_renamed,filename)
 
 # COMMAND ----------
 

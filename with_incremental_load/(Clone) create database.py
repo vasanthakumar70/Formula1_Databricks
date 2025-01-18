@@ -173,3 +173,14 @@ filename=dbutils.widgets.get("filename")
 # MAGIC %sql
 # MAGIC create database if not exists f1_processed_inc 
 # MAGIC managed location "/mnt/vasanthblob/incrementalload/processed"
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC drop database if exists f1_final_inc  cascade;
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC create database if not exists f1_final_inc 
+# MAGIC managed location "/mnt/vasanthblob/incrementalload/final"

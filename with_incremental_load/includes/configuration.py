@@ -7,4 +7,4 @@ presentation_path="/mnt/vasanthblob/incrementalload/final"
 
 raw_database="f1_raw_inc"
 process_database="f1_processed_inc"
-presentation_database="f1_presentation_inc"
+presentation_database="f1_final_inc"

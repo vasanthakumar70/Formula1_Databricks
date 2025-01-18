@@ -44,7 +44,7 @@ lap_times = lap_times.withColumnRenamed("driverId", "driver_id") \
 
 # COMMAND ----------
 
-lap_times_with_date=add_ingestion_date(lap_times)
+lap_times_with_date=add_ingestion_date(lap_times,filename)
 
 # COMMAND ----------
 

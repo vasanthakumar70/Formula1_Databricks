@@ -47,7 +47,7 @@ constructor_renamed=constructor\
 
 # COMMAND ----------
 
-constructor_with_date=add_ingestion_date(constructor_renamed)
+constructor_with_date=add_ingestion_date(constructor_renamed,filename)
 
 # COMMAND ----------
 
