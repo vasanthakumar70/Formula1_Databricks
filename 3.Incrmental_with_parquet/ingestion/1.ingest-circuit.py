@@ -54,15 +54,13 @@ circuit_with_date=add_ingestion_date(circuit_renamed,filename)
 
 # COMMAND ----------
 
-
-
-# COMMAND ----------
-
 circuit_with_date.show(truncate=False)
 
 # COMMAND ----------
 
-if source_point=="adls":
+if source_point == "adls":
     circuit_with_date.write.format("parquet").mode("overwrite").save(f"{process_path}/circuits")
-elif source_point=="table":
-    circuit_with_date.write.format("delta").mode("overwrite").saveAsTable(f"{process_database}.circuits")
+elif source_point == "table":
+    circuit_with_date.write.format("parquet").mode("overwrite")\
+          .option("path", f"abfss://{container_name}@vasanthblob.dfs.core.windows.net/processed/circuit")\
+            .saveAsTable("par_f1_processed_inc.circuits")

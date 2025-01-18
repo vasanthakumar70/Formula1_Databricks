@@ -1,27 +1,27 @@
 # Databricks notebook source
 # MAGIC %sql
-# MAGIC drop database if exists f1_raw_inc cascade
+# MAGIC drop database if exists par_f1_raw_inc cascade
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC drop database if exists f1_processed_inc cascade
+# MAGIC drop database if exists par_f1_processed_inc cascade
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC drop database if exists f1_final_inc cascade
+# MAGIC drop database if exists par_f1_final_inc cascade
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC create database if not exists f1_raw_inc
+# MAGIC create database if not exists par_f1_raw_inc
 # MAGIC
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC use database f1_raw_inc
+# MAGIC use database par_f1_raw_inc
 
 # COMMAND ----------
 
@@ -31,7 +31,7 @@ filename=dbutils.widgets.get("filename")
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC CREATE TABLE IF NOT EXISTS f1_raw_inc.circuits(
+# MAGIC CREATE TABLE IF NOT EXISTS par_f1_raw_inc.circuits(
 # MAGIC     circuitId INT,
 # MAGIC     circuitRef STRING,
 # MAGIC     name STRING,
@@ -45,14 +45,14 @@ filename=dbutils.widgets.get("filename")
 # MAGIC USING CSV
 # MAGIC OPTIONS (
 # MAGIC     header "true",
-# MAGIC     path 'abfss://incrementalload@vasanthblob.dfs.core.windows.net/${filename}/raw/circuits.csv'
+# MAGIC     path 'abfss://parquetincremental@vasanthblob.dfs.core.windows.net/raw/${filename}/circuits.csv'
 # MAGIC )
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC DROP TABLE IF EXISTS f1_raw_inc.races;
-# MAGIC CREATE TABLE IF NOT EXISTS f1_raw_inc.races(raceId INT,
+# MAGIC DROP TABLE IF EXISTS par_f1_raw_inc.races;
+# MAGIC CREATE TABLE IF NOT EXISTS par_f1_raw_inc.races(raceId INT,
 # MAGIC year INT,
 # MAGIC round INT,
 # MAGIC circuitId INT,
@@ -61,26 +61,26 @@ filename=dbutils.widgets.get("filename")
 # MAGIC time STRING,
 # MAGIC url STRING)
 # MAGIC USING csv
-# MAGIC OPTIONS (path "abfss://incrementalload@vasanthblob.dfs.core.windows.net/${filename}/raw/races.csv", header true)
+# MAGIC OPTIONS (path "abfss://parquetincremental@vasanthblob.dfs.core.windows.net/raw/${filename}/races.csv", header true)
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC DROP TABLE IF EXISTS f1_raw_inc.constructors;
-# MAGIC CREATE TABLE IF NOT EXISTS f1_raw_inc.constructors(
+# MAGIC DROP TABLE IF EXISTS par_f1_raw_inc.constructors;
+# MAGIC CREATE TABLE IF NOT EXISTS par_f1_raw_inc.constructors(
 # MAGIC constructorId INT,
 # MAGIC constructorRef STRING,
 # MAGIC name STRING,
 # MAGIC nationality STRING,
 # MAGIC url STRING)
 # MAGIC USING json
-# MAGIC OPTIONS(path "abfss://incrementalload@vasanthblob.dfs.core.windows.net/${filename}/raw/constructors.json")
+# MAGIC OPTIONS(path "abfss://parquetincremental@vasanthblob.dfs.core.windows.net/raw/${filename}/constructors.json")
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC DROP TABLE IF EXISTS f1_raw_inc.drivers;
-# MAGIC CREATE TABLE IF NOT EXISTS f1_raw_inc.drivers(
+# MAGIC DROP TABLE IF EXISTS par_f1_raw_inc.drivers;
+# MAGIC CREATE TABLE IF NOT EXISTS par_f1_raw_inc.drivers(
 # MAGIC driverId INT,
 # MAGIC driverRef STRING,
 # MAGIC number INT,
@@ -90,13 +90,13 @@ filename=dbutils.widgets.get("filename")
 # MAGIC nationality STRING,
 # MAGIC url STRING)
 # MAGIC USING json
-# MAGIC OPTIONS (path "abfss://incrementalload@vasanthblob.dfs.core.windows.net/${filename}/raw/drivers.json")
+# MAGIC OPTIONS (path "abfss://parquetincremental@vasanthblob.dfs.core.windows.net/raw/${filename}/drivers.json")
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC DROP TABLE IF EXISTS f1_raw_inc.results;
-# MAGIC CREATE TABLE IF NOT EXISTS f1_raw_inc.results(
+# MAGIC DROP TABLE IF EXISTS par_f1_raw_inc.results;
+# MAGIC CREATE TABLE IF NOT EXISTS par_f1_raw_inc.results(
 # MAGIC resultId INT,
 # MAGIC raceId INT,
 # MAGIC driverId INT,
@@ -115,13 +115,13 @@ filename=dbutils.widgets.get("filename")
 # MAGIC fastestLapSpeed FLOAT,
 # MAGIC statusId STRING)
 # MAGIC USING json
-# MAGIC OPTIONS(path "abfss://incrementalload@vasanthblob.dfs.core.windows.net/${filename}/raw/results.json")
+# MAGIC OPTIONS(path "abfss://parquetincremental@vasanthblob.dfs.core.windows.net/raw/${filename}/results.json")
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC DROP TABLE IF EXISTS f1_raw_inc.pit_stops;
-# MAGIC CREATE TABLE IF NOT EXISTS f1_raw_inc.pit_stops(
+# MAGIC DROP TABLE IF EXISTS par_f1_raw_inc.pit_stops;
+# MAGIC CREATE TABLE IF NOT EXISTS par_f1_raw_inc.pit_stops(
 # MAGIC driverId INT,
 # MAGIC duration STRING,
 # MAGIC lap INT,
@@ -130,13 +130,13 @@ filename=dbutils.widgets.get("filename")
 # MAGIC stop INT,
 # MAGIC time STRING)
 # MAGIC USING json
-# MAGIC OPTIONS(path "abfss://incrementalload@vasanthblob.dfs.core.windows.net/${filename}/raw/pit_stops.json", multiLine true)
+# MAGIC OPTIONS(path "abfss://parquetincremental@vasanthblob.dfs.core.windows.net/raw/${filename}/pit_stops.json", multiLine true)
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC DROP TABLE IF EXISTS f1_raw_inc.lap_times;
-# MAGIC CREATE TABLE IF NOT EXISTS f1_raw_inc.lap_times(
+# MAGIC DROP TABLE IF EXISTS par_f1_raw_inc.lap_times;
+# MAGIC CREATE TABLE IF NOT EXISTS par_f1_raw_inc.lap_times(
 # MAGIC raceId INT,
 # MAGIC driverId INT,
 # MAGIC lap INT,
@@ -145,13 +145,13 @@ filename=dbutils.widgets.get("filename")
 # MAGIC milliseconds INT
 # MAGIC )
 # MAGIC USING csv
-# MAGIC OPTIONS (path "abfss://incrementalload@vasanthblob.dfs.core.windows.net/${filename}/raw/lap_times")
+# MAGIC OPTIONS (path "abfss://parquetincremental@vasanthblob.dfs.core.windows.net/raw/${filename}/lap_times")
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC DROP TABLE IF EXISTS f1_raw_inc.qualifying;
-# MAGIC CREATE TABLE IF NOT EXISTS f1_raw_inc.qualifying(
+# MAGIC DROP TABLE IF EXISTS par_f1_raw_inc.qualifying;
+# MAGIC CREATE TABLE IF NOT EXISTS par_f1_raw_inc.qualifying(
 # MAGIC constructorId INT,
 # MAGIC driverId INT,
 # MAGIC number INT,
@@ -162,7 +162,7 @@ filename=dbutils.widgets.get("filename")
 # MAGIC qualifyId INT,
 # MAGIC raceId INT)
 # MAGIC USING json
-# MAGIC OPTIONS (path "abfss://incrementalload@vasanthblob.dfs.core.windows.net/${filename}/raw/qualifying", multiLine true)
+# MAGIC OPTIONS (path "abfss://parquetincremental@vasanthblob.dfs.core.windows.net/raw/${filename}/qualifying", multiLine true)
 
 # COMMAND ----------
 
@@ -171,16 +171,20 @@ filename=dbutils.widgets.get("filename")
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC create database if not exists f1_processed_inc 
-# MAGIC managed location "/mnt/vasanthblob/incrementalload/processed"
+# MAGIC create database if not exists par_f1_processed_inc 
+# MAGIC managed location "abfss://parquetincremental@vasanthblob.dfs.core.windows.net/processed/"
+
+# COMMAND ----------
+
+
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC drop database if exists f1_final_inc  cascade;
+# MAGIC drop database if exists par_f1_final_inc  cascade;
 
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC create database if not exists f1_final_inc 
-# MAGIC managed location "/mnt/vasanthblob/incrementalload/final"
+# MAGIC create database if not exists par_f1_final_inc 
+# MAGIC
